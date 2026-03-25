@@ -1,65 +1,92 @@
-import Image from "next/image";
+"use client";
+
+import { useRef, useState } from "react";
+import { useScroll, useMotionValueEvent } from "framer-motion";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import HeroSection from "@/components/sections/HeroSection";
+import ProblemSection from "@/components/sections/ProblemSection";
+import SolutionSection from "@/components/sections/SolutionSection";
+import HowItWorksSection from "@/components/sections/HowItWorksSection";
+import PhilosophySection from "@/components/sections/PhilosophySection";
+import FinalCTASection from "@/components/sections/FinalCTASection";
+import ServiceModal from "@/components/ui/ServiceModal";
+import { useModal } from "@/hooks/useModal";
+import { SECTION_RANGES, SCROLL_HEIGHT } from "@/lib/constants";
 
 export default function Home() {
+  const modal = useModal();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: scrollRef,
+    offset: ["start start", "end end"],
+  });
+
+  const [fixedVisible, setFixedVisible] = useState(true);
+
+  // Philosophy 범위가 끝나면 fixed 레이어 숨김 → CTA가 보임
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    setFixedVisible(v < 0.99);
+  });
+
+  const handleCTAClick = (platform: "ios" | "android") => {
+    modal.open(platform);
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <>
+      <Header onCTAClick={() => handleCTAClick("ios")} />
+
+      {/* 데스크톱: fixed 레이어 + 스크롤 컨테이너 */}
+      <div className="hidden lg:block">
+        <div ref={scrollRef} style={{ height: SCROLL_HEIGHT }}>
+          <div className={`fixed inset-0 z-10 pointer-events-none ${fixedVisible ? "" : "invisible"}`}>
+            <HeroSection
+              scrollYProgress={scrollYProgress}
+              range={SECTION_RANGES.hero}
+              onCTAClick={handleCTAClick}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <ProblemSection
+              scrollYProgress={scrollYProgress}
+              range={SECTION_RANGES.problem}
+            />
+            <SolutionSection
+              scrollYProgress={scrollYProgress}
+              range={SECTION_RANGES.solution}
+            />
+            <HowItWorksSection
+              scrollYProgress={scrollYProgress}
+              range={SECTION_RANGES.howItWorks}
+            />
+            <PhilosophySection
+              scrollYProgress={scrollYProgress}
+              range={SECTION_RANGES.philosophy}
+            />
+          </div>
         </div>
-      </main>
-    </div>
+        {/* CTA + Footer: 일반 스크롤 */}
+        <FinalCTASection onCTAClick={handleCTAClick} />
+        <Footer />
+      </div>
+
+      {/* 모바일: 일반 스크롤 */}
+      <div className="lg:hidden">
+        <main>
+          <HeroSection onCTAClick={handleCTAClick} />
+          <ProblemSection />
+          <SolutionSection />
+          <HowItWorksSection />
+          <PhilosophySection />
+          <FinalCTASection onCTAClick={handleCTAClick} />
+        </main>
+        <Footer />
+      </div>
+
+      <ServiceModal
+        isOpen={modal.isOpen}
+        platform={modal.platform}
+        onClose={modal.close}
+      />
+    </>
   );
 }
