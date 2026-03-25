@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import { motion, useTransform, useMotionValueEvent, type MotionValue } from "framer-motion";
-import { SECTION_IDS, ANIMATION } from "@/lib/constants";
+import { SECTION_IDS, ANIMATION, SECTION_TRANSITION } from "@/lib/constants";
+import { useScrollTrigger } from "@/hooks/useScrollTrigger";
+
+const EASE_OUT_EXPO: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 const problems = [
-  { title: "등록은 했는데", description: "일정을 넣어놓고도 깜빡하는 건 여전합니다.",
-    icon: <svg width="32" height="32" viewBox="0 0 32 32" fill="none" className="text-gray-400"><rect x="6" y="4" width="20" height="24" rx="2" stroke="currentColor" strokeWidth="1.5" /><path d="M11 4V2m10 2V2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /><path d="M6 10h20" stroke="currentColor" strokeWidth="1.5" /><path d="M12 16l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg> },
-  { title: "알림은 울렸는데", description: "무심코 넘긴 알림, 결국 놓친 약속.",
-    icon: <svg width="32" height="32" viewBox="0 0 32 32" fill="none" className="text-gray-400"><path d="M16 4a8 8 0 00-8 8v6l-2 3h20l-2-3v-6a8 8 0 00-8-8z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" /><path d="M13 25a3 3 0 006 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /><path d="M20 8l4-4M12 8L8 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg> },
-  { title: "확인하려면", description: "앱 열고, 날짜 찾고, 스크롤하고... 귀찮죠.",
-    icon: <svg width="32" height="32" viewBox="0 0 32 32" fill="none" className="text-gray-400"><rect x="9" y="4" width="14" height="24" rx="3" stroke="currentColor" strokeWidth="1.5" /><path d="M14 6h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /><circle cx="16" cy="24" r="1" fill="currentColor" /><path d="M13 13h6m-6 3h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg> },
+  { number: "01", title: "등록은 했는데", description: "일정을 넣어놓고도 깜빡하는 건 여전합니다." },
+  { number: "02", title: "알림은 울렸는데", description: "무심코 넘긴 알림, 결국 놓친 약속." },
+  { number: "03", title: "확인하려면", description: "앱 열고, 날짜 찾고, 스크롤하고... 귀찮죠." },
 ];
 
 function ProblemFixed({ scrollYProgress, range }: { scrollYProgress: MotionValue<number>; range: [number, number] }) {
@@ -18,32 +18,56 @@ function ProblemFixed({ scrollYProgress, range }: { scrollYProgress: MotionValue
   const [entered, setEntered] = useState(false);
   const progress = useTransform(scrollYProgress, [start, end], [0, 1]);
 
-  useMotionValueEvent(scrollYProgress, "change", (v) => setEntered(v >= start - 0.005));
+  useMotionValueEvent(scrollYProgress, "change", (v) => setEntered(v >= start - 0.01));
 
-  const contentOpacity = useTransform(scrollYProgress, [start, start + 0.015], [0, 1]);
-  const contentScale = useTransform(scrollYProgress, [start, start + 0.015], [1.03, 1]);
+  // 섹션 진입/퇴장 — 스크롤 직동 (4-keyframe)
+  const t = SECTION_TRANSITION.duration;
+  const contentOpacity = useTransform(scrollYProgress, [start, start + t, end - t, end], [0, 1, 1, 0]);
+  const contentScale = useTransform(scrollYProgress, [start, start + t, end - t, end], [SECTION_TRANSITION.scaleIn, 1, 1, SECTION_TRANSITION.scaleOut]);
+  const contentY = useTransform(scrollYProgress, [start, start + t], ["3%", "0%"]);
 
-  const titleY = useTransform(progress, [0.05, 0.2], ["100%", "0%"]);
-  const labelOpacity = useTransform(progress, [0.05, 0.15], [0, 1]);
-  const card1Clip = useTransform(progress, [0.2, 0.35], ["inset(100% 0 0 0)", "inset(0% 0 0 0)"]);
-  const card2Clip = useTransform(progress, [0.35, 0.5], ["inset(100% 0 0 0)", "inset(0% 0 0 0)"]);
-  const card3Clip = useTransform(progress, [0.5, 0.65], ["inset(100% 0 0 0)", "inset(0% 0 0 0)"]);
-  const cardClips = [card1Clip, card2Clip, card3Clip];
+  // 내부 요소 — 임계값 트리거
+  const labelTriggered = useScrollTrigger(progress, 0.05);
+  const titleTriggered = useScrollTrigger(progress, 0.05);
+  const row1Triggered = useScrollTrigger(progress, 0.20);
+  const row2Triggered = useScrollTrigger(progress, 0.35);
+  const row3Triggered = useScrollTrigger(progress, 0.50);
+  const rowTriggered = [row1Triggered, row2Triggered, row3Triggered];
 
   return (
     <div className={`absolute inset-0 z-[2] bg-gray-50 pointer-events-auto ${entered ? "" : "invisible"}`}>
-      <motion.div style={{ opacity: contentOpacity, scale: contentScale }} className="flex h-full items-center">
-        <div className="mx-auto w-full max-w-6xl px-8">
-          <motion.span style={{ opacity: labelOpacity }} className="text-xs font-medium uppercase tracking-widest text-gray-400">Problem</motion.span>
+      <motion.div style={{ opacity: contentOpacity, scale: contentScale, y: contentY }} className="flex h-full items-center">
+        <div className="mx-auto w-full max-w-5xl px-8">
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={labelTriggered ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
+            className="text-xs font-medium uppercase tracking-widest text-gray-400"
+          >Problem</motion.span>
           <div className="mt-4 overflow-hidden">
-            <motion.h2 style={{ y: titleY }} className="text-[48px] font-semibold leading-tight tracking-tight text-gray-950">캘린더, 등록만 하고<br />확인은 안 하죠?</motion.h2>
+            <motion.h2
+              initial={{ y: "100%" }}
+              animate={titleTriggered ? { y: "0%" } : { y: "100%" }}
+              transition={{ duration: 0.9, ease: EASE_OUT_EXPO }}
+              className="text-[48px] font-semibold leading-tight tracking-tight text-gray-950"
+            >캘린더,<br />아직도 직접 열고 있나요?</motion.h2>
           </div>
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
+          <div className="mt-16">
             {problems.map((p, i) => (
-              <motion.div key={p.title} style={{ clipPath: cardClips[i] }} className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-                <div className="mb-5">{p.icon}</div>
-                <h3 className="text-lg font-semibold text-gray-950">{p.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-500">{p.description}</p>
+              <motion.div
+                key={p.number}
+                initial={{ opacity: 0, y: 30 }}
+                animate={rowTriggered[i] ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{ duration: 0.8, ease: EASE_OUT_EXPO }}
+                className="border-t border-gray-300 py-8"
+              >
+                <div className="flex items-baseline gap-10">
+                  <span className="text-sm font-medium tabular-nums text-gray-300">{p.number}</span>
+                  <div>
+                    <h3 className="text-2xl font-semibold text-gray-950">{p.title}</h3>
+                    <p className="mt-2 text-base leading-relaxed text-gray-500">{p.description}</p>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -56,15 +80,29 @@ function ProblemFixed({ scrollYProgress, range }: { scrollYProgress: MotionValue
 function ProblemMobile() {
   return (
     <section id={SECTION_IDS.problem} className="bg-gray-50 py-32 md:py-40">
-      <div className="mx-auto max-w-6xl px-6 md:px-8">
+      <div className="mx-auto max-w-5xl px-6 md:px-8">
         <motion.span variants={ANIMATION.fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} className="text-xs font-medium uppercase tracking-widest text-gray-400">Problem</motion.span>
         <motion.h2 variants={ANIMATION.fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} className="mt-4 text-[32px] font-semibold leading-tight tracking-tight text-gray-950">캘린더, 등록만 하고<br />확인은 안 하죠?</motion.h2>
-        <motion.div variants={ANIMATION.staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} className="mt-14 grid gap-6">
+        <motion.div
+          variants={ANIMATION.staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          className="mt-14"
+        >
           {problems.map((p) => (
-            <motion.div key={p.title} variants={ANIMATION.clipRevealUp} className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-              <div className="mb-5">{p.icon}</div>
-              <h3 className="text-lg font-semibold text-gray-950">{p.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-gray-500">{p.description}</p>
+            <motion.div
+              key={p.number}
+              variants={ANIMATION.fadeInUp}
+              className="border-t border-gray-300 py-7"
+            >
+              <div className="flex items-baseline gap-6">
+                <span className="text-sm font-medium tabular-nums text-gray-300">{p.number}</span>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-950">{p.title}</h3>
+                  <p className="mt-2 text-base leading-relaxed text-gray-500">{p.description}</p>
+                </div>
+              </div>
             </motion.div>
           ))}
         </motion.div>

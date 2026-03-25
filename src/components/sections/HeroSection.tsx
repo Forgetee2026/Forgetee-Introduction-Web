@@ -22,17 +22,17 @@ function AnimatedText({ text, className, delay = 0 }: { text: string; className?
 
 function HeroFixed({ scrollYProgress, range, onCTAClick }: { scrollYProgress: MotionValue<number>; range: [number, number]; onCTAClick: (p: "ios" | "android") => void }) {
   const [, end] = range;
-  const contentOpacity = useTransform(scrollYProgress, [0, end - 0.015, end], [1, 1, 0]);
-  const contentScale = useTransform(scrollYProgress, [0, end - 0.015, end], [1, 1, 0.96]);
+  const contentOpacity = useTransform(scrollYProgress, [0, end - 0.04, end], [1, 1, 0]);
+  const contentScale = useTransform(scrollYProgress, [0, end - 0.04, end], [1, 1, 0.95]);
   const indicatorOpacity = useTransform(scrollYProgress, [0, 0.02, 0.04], [1, 1, 0]);
 
   return (
     <div className="absolute inset-0 z-[1] bg-white pointer-events-auto">
       <motion.div style={{ opacity: contentOpacity, scale: contentScale }} className="flex h-full items-center justify-center px-6">
         <div className="flex flex-col items-center text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="mb-8 inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-4 py-1.5 text-xs font-medium text-gray-600">
-            AI 일정 리마인더
-          </motion.div>
+           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="mb-8 inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-4 py-1.5 text-xs font-medium text-gray-600">
+            잊어도 되는 일정 관리
+          </motion.div> 
           <AnimatedText text={"일정은 잊으세요.\n기억은 제가 할게요."} className="text-[56px] font-bold leading-[1.1] tracking-tight text-gray-950 lg:text-[72px]" delay={0.3} />
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }} className="mt-8 max-w-md text-lg leading-relaxed text-gray-500">
             캘린더 들여다보는 시간도 아깝잖아요.<br />ForGet이 필요한 순간에 알려드립니다.
@@ -57,7 +57,7 @@ function HeroMobile({ onCTAClick }: { onCTAClick: (p: "ios" | "android") => void
   return (
     <section id={SECTION_IDS.hero} className="flex min-h-screen items-center justify-center overflow-hidden px-6 pt-20">
       <div className="flex flex-col items-center text-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-8 inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-4 py-1.5 text-xs font-medium text-gray-600">AI 일정 리마인더</motion.div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mb-8 inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-4 py-1.5 text-xs font-medium text-gray-600">잊어도 되는 일정 관리</motion.div>
         <AnimatedText text={"일정은 잊으세요.\n기억은 제가 할게요."} className="text-[40px] font-bold leading-[1.1] tracking-tight text-gray-950" delay={0.3} />
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4, duration: 0.8 }} className="mt-6 max-w-md text-base leading-relaxed text-gray-500">캘린더 들여다보는 시간도 아깝잖아요.<br />ForGet이 필요한 순간에 알려드립니다.</motion.p>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.8, duration: 0.8 }} className="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-4">

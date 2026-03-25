@@ -88,11 +88,11 @@ export default function Header({
             <Image
               src="/images/main_logo.png"
               alt="ForGet 로고"
-              width={28}
-              height={28}
-              className="h-7 w-auto"
+              width={32}
+              height={32}
+              className="h-8 w-auto"
             />
-            <span className="text-lg font-semibold tracking-tight text-gray-950">
+            <span className="text-xl font-semibold tracking-tight text-gray-950">
               For<span className="font-bold">G</span>et
             </span>
           </a>

@@ -121,3 +121,10 @@ export const ANIMATION = {
     },
   },
 } as const;
+
+// 섹션 전환 설정
+export const SECTION_TRANSITION = {
+  duration: 0.04, // 전환 구간 (전체 progress의 4%)
+  scaleIn: 1.03, // 진입 시 초기 scale
+  scaleOut: 0.97, // 퇴장 시 최종 scale
+} as const;

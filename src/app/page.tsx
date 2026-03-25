@@ -24,7 +24,7 @@ export default function Home() {
 
   const [fixedVisible, setFixedVisible] = useState(true);
 
-  // Philosophy 범위가 끝나면 fixed 레이어 숨김 → CTA가 보임
+  // 스크롤 끝에서 fixed 레이어 숨김 → CTA가 보임
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     setFixedVisible(v < 0.99);
   });
