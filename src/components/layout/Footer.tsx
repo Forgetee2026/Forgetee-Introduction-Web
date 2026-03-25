@@ -20,9 +20,9 @@ export default function Footer() {
               </span>
             </div>
             <p className="max-w-xs text-sm leading-relaxed text-gray-500">
-              AI가 대신 기억하는 세상에서,
+              기억은 AI에게,
               <br />
-              당신은 그냥 살면 됩니다.
+              여유는 당신에게.
             </p>
           </div>
 
