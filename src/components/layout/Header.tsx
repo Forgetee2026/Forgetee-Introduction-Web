@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import Image from "next/image";
-import { NAV_ITEMS, SECTION_RANGES } from "@/lib/constants";
+import { NAV_ITEMS, SECTION_RANGES, NAV_SCROLL_OFFSET } from "@/lib/constants";
 
 // 섹션 ID → 스크롤 범위 매핑
 const SECTION_START: Record<string, number> = {
-  problem: SECTION_RANGES.problem[0],
-  solution: SECTION_RANGES.solution[0],
-  "how-it-works": SECTION_RANGES.howItWorks[0],
-  philosophy: SECTION_RANGES.philosophy[0],
+  problem: SECTION_RANGES.problem[0] + NAV_SCROLL_OFFSET,
+  solution: SECTION_RANGES.solution[0] + NAV_SCROLL_OFFSET,
+  "how-it-works": SECTION_RANGES.howItWorks[0] + NAV_SCROLL_OFFSET,
+  philosophy: SECTION_RANGES.philosophy[0] + NAV_SCROLL_OFFSET,
 };
 
 export default function Header({
@@ -52,7 +52,7 @@ export default function Header({
       const start = SECTION_START[id];
       if (start !== undefined) {
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-        window.scrollTo({ top: start * maxScroll, behavior: "smooth" });
+        window.scrollTo({ top: start * maxScroll, behavior: "instant" });
       }
       return;
     }

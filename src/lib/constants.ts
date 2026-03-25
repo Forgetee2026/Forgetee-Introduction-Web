@@ -128,3 +128,6 @@ export const SECTION_TRANSITION = {
   scaleIn: 1.03, // 진입 시 초기 scale
   scaleOut: 0.97, // 퇴장 시 최종 scale
 } as const;
+
+// 네비게이션 클릭 시 스크롤 오프셋 (contentOpacity=1 시점으로 보정)
+export const NAV_SCROLL_OFFSET = SECTION_TRANSITION.duration;
