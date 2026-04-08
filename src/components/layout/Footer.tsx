@@ -9,7 +9,7 @@ export default function Footer() {
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2.5">
               <Image
-                src="/images/main_logo.png"
+                src="/images/main_logo_size_up.png"
                 alt="ForGet 로고"
                 width={24}
                 height={24}

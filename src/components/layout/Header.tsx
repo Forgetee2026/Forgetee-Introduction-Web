@@ -86,7 +86,7 @@ export default function Header({
             className="flex items-center gap-2.5"
           >
             <Image
-              src="/images/main_logo.png"
+              src="/images/main_logo_size_up.png"
               alt="ForGet 로고"
               width={32}
               height={32}
