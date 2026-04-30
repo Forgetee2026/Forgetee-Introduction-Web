@@ -3,14 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/lib/i18n";
-import {
-  privacyPolicyUrl,
-  termsOfServiceUrl,
-  SUPPORT_EMAIL,
-} from "@/lib/external-urls";
+import { SUPPORT_EMAIL } from "@/lib/external-urls";
 
 export default function Footer() {
-  const { lang, t } = useLanguage();
+  const { t } = useLanguage();
 
   return (
     <footer className="border-t border-gray-200">
@@ -41,22 +37,18 @@ export default function Footer() {
               <span className="font-medium text-gray-950">
                 {t("footer.sections.service")}
               </span>
-              <a
-                href={privacyPolicyUrl(lang)}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/privacy"
                 className="transition-colors hover:text-gray-700"
               >
                 {t("footer.links.privacy")}
-              </a>
-              <a
-                href={termsOfServiceUrl(lang)}
-                target="_blank"
-                rel="noopener noreferrer"
+              </Link>
+              <Link
+                href="/terms"
                 className="transition-colors hover:text-gray-700"
               >
                 {t("footer.links.terms")}
-              </a>
+              </Link>
             </div>
             <div className="flex flex-col gap-3">
               <span className="font-medium text-gray-950">

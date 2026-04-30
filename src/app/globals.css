@@ -66,3 +66,147 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--gray-400);
 }
+
+/* 정책/약관 페이지 (/privacy, /terms) 의 마크다운 본문 스타일 — 미니멀, 가독성 우선 */
+.legal-article {
+  color: var(--gray-700);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.legal-article h1 {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--gray-950);
+  margin-top: 0;
+  margin-bottom: 32px;
+  line-height: 1.2;
+}
+
+.legal-article h2 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--gray-950);
+  margin-top: 56px;
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+
+.legal-article h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--gray-950);
+  margin-top: 32px;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.legal-article p {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.legal-article ul,
+.legal-article ol {
+  margin-top: 0;
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+
+.legal-article ul {
+  list-style: disc;
+}
+
+.legal-article ol {
+  list-style: decimal;
+}
+
+.legal-article li {
+  margin-bottom: 6px;
+}
+
+.legal-article li::marker {
+  color: var(--gray-400);
+}
+
+.legal-article strong {
+  font-weight: 600;
+  color: var(--gray-950);
+}
+
+.legal-article a {
+  color: var(--gray-950);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--gray-300);
+  transition: text-decoration-color 0.15s ease;
+}
+
+.legal-article a:hover {
+  text-decoration-color: var(--gray-700);
+}
+
+.legal-article hr {
+  margin: 48px 0;
+  border: 0;
+  border-top: 1px solid var(--gray-200);
+}
+
+.legal-article blockquote {
+  margin: 24px 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--gray-300);
+  background: var(--gray-50);
+  color: var(--gray-600);
+  font-size: 14px;
+}
+
+.legal-article blockquote p {
+  margin: 0;
+}
+
+.legal-article code {
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 13px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  color: var(--gray-800);
+}
+
+.legal-article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0 24px;
+  font-size: 14px;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .legal-article table {
+    display: table;
+    white-space: normal;
+  }
+}
+
+.legal-article thead {
+  background: var(--gray-50);
+}
+
+.legal-article th,
+.legal-article td {
+  padding: 10px 14px;
+  border: 1px solid var(--gray-200);
+  text-align: left;
+  vertical-align: top;
+}
+
+.legal-article th {
+  font-weight: 600;
+  color: var(--gray-950);
+}
