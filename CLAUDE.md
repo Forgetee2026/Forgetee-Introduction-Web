@@ -93,3 +93,79 @@ npm run dev      # 개발 서버
 npm run build    # 정적 사이트 빌드 (out/ 디렉토리)
 npm run lint     # ESLint 검사
 ```
+
+---
+
+## Git 워크플로우 (작업 요청 시 자동 수행)
+
+사용자의 작업 요청(섹션 추가/수정, 텍스트 변경, 디자인 개선, 버그 수정 등)을 받으면 아래 절차를 순서대로 수행한다.
+
+### 이슈 타입 매핑
+
+| 타입 | 이모지 | 브랜치 접두사 | 트리거 예시 |
+|------|--------|-------------|------------|
+| Feature | ✨ | `feature/` | 새 섹션/페이지 추가, 기능 추가 (i18n, 토글 등) |
+| Fix | 🔨 | `fix/` | 버그 수정, 텍스트/링크 수정 |
+| BugFix | 🐞 | `bugfix/` | 런타임 버그, 빌드 실패 |
+| Refactor | ♻️ | `refactor/` | 리팩터링 (Dual rendering 분리 등) |
+| Chore | 🧰 | `chore/` | 정리, 의존성 업데이트, README |
+| Docs | 📃 | `docs/` | CLAUDE.md / 브랜드 가이드 등 문서 작성 |
+| Setting | ⚙️ | `setting/` | 개발 환경 설정 (eslint/tsconfig 등) |
+| Deploy | 🌏 | `deploy/` | 배포 |
+| Design | 🎨 | `design/` | 디자인/마크업 (애니메이션, 색상, 폰트) |
+
+### 절차
+
+#### 1단계: dev 브랜치 최신화
+```bash
+git checkout dev && git pull origin dev
+```
+
+#### 2단계: GitHub 이슈 생성
+- 요청 내용을 분석하여 적절한 이슈 타입 선택
+- `gh issue create` 로 이슈 생성 (타이틀에 이모지 포함)
+- 생성된 이슈 번호 확인 (예: #5)
+
+#### 3단계: 이슈 브랜치 생성 및 체크아웃
+- 형식: `{타입}/#{이슈번호}` (예: `feature/#5`, `fix/#6`)
+- `git checkout -b feature/#5`
+
+#### 4단계: 작업 수행
+- Dual rendering(데스크톱/모바일) 패턴 준수
+- `ANIMATION` / `SECTION_RANGES` 프리셋 재사용
+- 텍스트 변경 시 i18n dict (`src/lib/i18n/ko.ts`, `en.ts`) 양쪽 동기 업데이트
+- `npm run lint` / `npm run build` 통과 확인
+
+#### 5단계: 사용자 확인 대기
+- 작업 완료 후 사용자에게 확인 요청
+- 사용자가 "문제 없다"고 할 때까지 수정 반복
+
+#### 6단계: 커밋 및 푸시
+- 커밋 메시지 형식: `{타입}: {작업 내용 요약}`
+  - 예: `feature: 도움말 페이지 + i18n 토글 추가`
+  - 예: `fix: Footer 정책 링크 깨진 거 수정`
+- `git push -u origin {브랜치명}`
+
+#### 7단계: PR 생성 (머지는 사용자 명시 지시 후)
+- **PR 제목 앞에 반드시 이모지 포함**
+- PR 제목 형식: `{이모지} {타입}: {작업 내용}`
+  - 예: `✨ Feature: 도움말 페이지 + 한영 토글`
+- PR 본문에 `closes #{이슈번호}` 포함 → merge 시 이슈 자동 닫힘
+- PR 생성까지만 자동, **squash merge 는 사용자가 "머지해" 지시할 때까지 대기**
+- squash merge 시: `gh pr merge --squash --subject "✨ Feature: ..."` 형태로 이모지 포함 제목 명시
+
+#### 8단계: 로컬 정리 (머지 후)
+```bash
+git checkout dev && git pull origin dev
+git branch -d {브랜치명}
+```
+
+---
+
+## 작업 시 주의사항
+
+- `output: "export"` SSG 모드 — 서버 컴포넌트/API 라우트 추가 금지
+- 외부 링크는 `target="_blank" rel="noopener noreferrer"` 로 보안 처리
+- CTA / 마케팅 톤 유지 — 정보성 콘텐츠는 별도 페이지(`/help` 등) 로 분리
+- 정책/약관/도움말 등 외부 링크는 Notion 또는 별도 페이지로 분리
+

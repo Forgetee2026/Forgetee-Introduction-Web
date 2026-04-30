@@ -13,6 +13,7 @@ import FinalCTASection from "@/components/sections/FinalCTASection";
 import ServiceModal from "@/components/ui/ServiceModal";
 import { useModal } from "@/hooks/useModal";
 import { SECTION_RANGES, SCROLL_HEIGHT } from "@/lib/constants";
+import { APP_STORE_IOS_URL } from "@/lib/external-urls";
 
 export default function Home() {
   const modal = useModal();
@@ -29,7 +30,12 @@ export default function Home() {
     setFixedVisible(v < 0.99);
   });
 
+  // iOS 는 App Store 로 직접 이동, Android 는 아직 미출시이므로 ServiceModal 안내
   const handleCTAClick = (platform: "ios" | "android") => {
+    if (platform === "ios") {
+      window.open(APP_STORE_IOS_URL, "_blank", "noopener,noreferrer");
+      return;
+    }
     modal.open(platform);
   };
 

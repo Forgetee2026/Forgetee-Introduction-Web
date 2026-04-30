@@ -4,25 +4,24 @@ import { useState } from "react";
 import { motion, useTransform, useMotionValueEvent, type MotionValue } from "framer-motion";
 import { SECTION_IDS, SECTION_TRANSITION } from "@/lib/constants";
 import { useScrollTrigger } from "@/hooks/useScrollTrigger";
+import { useLanguage } from "@/lib/i18n";
 
 const EASE_OUT_EXPO: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-const lines = ["기억은 AI에게,", "여유는 당신에게"];
-
 function PhilosophyFixed({ scrollYProgress, range }: { scrollYProgress: MotionValue<number>; range: [number, number] }) {
+  const { t } = useLanguage();
+  const lines = [t("philosophy.lineOne"), t("philosophy.lineTwo")];
   const [start, end] = range;
   const [entered, setEntered] = useState(false);
   const progress = useTransform(scrollYProgress, [start, end], [0, 1]);
 
-  // 섹션 진입 — 마지막 fixed 섹션이므로 퇴장은 fixedVisible로 처리
-  const t = SECTION_TRANSITION.duration;
-  const contentOpacity = useTransform(scrollYProgress, [start, start + t], [0, 1]);
-  const contentScale = useTransform(scrollYProgress, [start, start + t], [SECTION_TRANSITION.scaleIn, 1]);
-  const contentY = useTransform(scrollYProgress, [start, start + t], ["3%", "0%"]);
+  const tr = SECTION_TRANSITION.duration;
+  const contentOpacity = useTransform(scrollYProgress, [start, start + tr], [0, 1]);
+  const contentScale = useTransform(scrollYProgress, [start, start + tr], [SECTION_TRANSITION.scaleIn, 1]);
+  const contentY = useTransform(scrollYProgress, [start, start + tr], ["3%", "0%"]);
 
   useMotionValueEvent(scrollYProgress, "change", (v) => setEntered(v >= start - 0.01));
 
-  // 내부 요소 — 임계값 트리거
   const quoteTriggered = useScrollTrigger(progress, 0.05);
   const linesTriggered = useScrollTrigger(progress, 0.10);
   const dividerTriggered = useScrollTrigger(progress, 0.40);
@@ -70,7 +69,7 @@ function PhilosophyFixed({ scrollYProgress, range }: { scrollYProgress: MotionVa
             animate={subTriggered ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
             transition={{ duration: 0.8, ease: EASE_OUT_EXPO }}
             className="mt-3 text-sm text-gray-400"
-          >당신을 위해, 모든 것을 챙기겠습니다.</motion.p>
+          >{t("philosophy.taglineSub")}</motion.p>
         </div>
       </motion.div>
     </div>
@@ -78,6 +77,8 @@ function PhilosophyFixed({ scrollYProgress, range }: { scrollYProgress: MotionVa
 }
 
 function PhilosophyMobile() {
+  const { t } = useLanguage();
+  const lines = [t("philosophy.lineOne"), t("philosophy.lineTwo")];
   return (
     <section id={SECTION_IDS.philosophy} className="flex min-h-[80vh] items-center py-32 md:py-40">
       <div className="mx-auto max-w-5xl px-6 text-center md:px-8">
@@ -87,7 +88,7 @@ function PhilosophyMobile() {
         </motion.div>
         <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ delay: 1, duration: 1.2, ease: [0.16, 1, 0.3, 1] }} className="mx-auto mt-10 h-px w-12 origin-center bg-gray-300" />
         <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-8 text-lg tracking-wide text-gray-400"><span className="font-semibold text-gray-950">For</span> you, <span className="font-semibold text-gray-950">Get</span> everything done.</motion.p>
-        <motion.p initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 1.5, duration: 0.8 }} className="mt-3 text-sm text-gray-400">당신을 위해, 모든 것을 챙기겠습니다.</motion.p>
+        <motion.p initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 1.5, duration: 0.8 }} className="mt-3 text-sm text-gray-400">{t("philosophy.taglineSub")}</motion.p>
       </div>
     </section>
   );

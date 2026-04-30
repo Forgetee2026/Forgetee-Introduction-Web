@@ -13,6 +13,13 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      // SSR-safe lazy initialization 패턴(useEffect 내 setState 1회 호출)에는
+      // 정상이라 룰을 끈다. cascading render 경고는 의도된 hydration 흐름이다.
+      "react-hooks/set-state-in-effect": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

@@ -1,8 +1,8 @@
 export const SITE_CONFIG = {
-  name: "ForGet",
-  title: "ForGet - AI가 대신 기억합니다 | AI 일정 리마인더",
+  name: "ForGetee",
+  title: "ForGetee - AI가 대신 기억합니다 | AI 일정 리마인더",
   description:
-    "일정은 잊으세요. 기억은 제가 할게요. ForGet은 AI 기반 스마트 일정 리마인더 서비스입니다.",
+    "일정은 잊으세요. 기억은 제가 할게요. ForGetee은 AI 기반 스마트 일정 리마인더 서비스입니다.",
   url: "https://forget.app",
   locale: "ko_KR",
 } as const;

@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { motion, useTransform, useMotionValueEvent, type MotionValue } from "framer-motion";
 import { SECTION_IDS, ANIMATION, SECTION_TRANSITION } from "@/lib/constants";
+import { useLanguage } from "@/lib/i18n";
 
-const features = [
-  { label: "01", title: "간단하게 등록하세요.", description: "일정을 입력하면 AI가 알아서 만듭니다.\n날짜, 시간, 장소까지 자동으로." },
-  { label: "02", title: "AI가 타이밍을 정해드립니다.", description: "일정의 종류, 중요도, 이동 시간까지 고려해\n최적의 리마인드 시점을 추천합니다." },
-  { label: "03", title: "전화로 알려드립니다.", description: "중요한 일정은 AI가 직접 전화합니다.\n놓칠 수 없도록." },
-];
+const FEATURE_KEYS = [
+  { label: "01", key: "a" },
+  { label: "02", key: "b" },
+  { label: "03", key: "c" },
+] as const;
 
 function NaturalLanguageMockup() {
   return (
@@ -40,27 +41,26 @@ function CallMockup() {
           <motion.div animate={{ scale: [1, 1.6], opacity: [0.3, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeOut" }} className="absolute inset-0 rounded-full bg-gray-950" />
           <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gray-950"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg></div>
         </div>
-        <p className="mt-4 text-sm font-medium text-gray-950">ForGet</p>
+        <p className="mt-4 text-sm font-medium text-gray-950">ForGetee</p>
         <p className="mt-1 text-xs text-gray-400">&ldquo;오후 3시 팀 미팅, 30분 남았어요.&rdquo;</p>
       </div>
     </div>
   );
 }
-const mockups = [<NaturalLanguageMockup />, <TimelineMockup />, <CallMockup />];
+const mockups = [<NaturalLanguageMockup key="natural" />, <TimelineMockup key="timeline" />, <CallMockup key="call" />];
 
 function SolutionFixed({ scrollYProgress, range }: { scrollYProgress: MotionValue<number>; range: [number, number] }) {
+  const { t } = useLanguage();
   const [start, end] = range;
   const [activeIndex, setActiveIndex] = useState(0);
   const progress = useTransform(scrollYProgress, [start, end], [0, 1]);
   const [entered, setEntered] = useState(false);
 
-  // 섹션 진입/퇴장 — 4-keyframe
-  const t = SECTION_TRANSITION.duration;
-  const contentOpacity = useTransform(scrollYProgress, [start, start + t, end - t, end], [0, 1, 1, 0]);
-  const contentScale = useTransform(scrollYProgress, [start, start + t, end - t, end], [SECTION_TRANSITION.scaleIn, 1, 1, SECTION_TRANSITION.scaleOut]);
-  const contentY = useTransform(scrollYProgress, [start, start + t], ["3%", "0%"]);
+  const tr = SECTION_TRANSITION.duration;
+  const contentOpacity = useTransform(scrollYProgress, [start, start + tr, end - tr, end], [0, 1, 1, 0]);
+  const contentScale = useTransform(scrollYProgress, [start, start + tr, end - tr, end], [SECTION_TRANSITION.scaleIn, 1, 1, SECTION_TRANSITION.scaleOut]);
+  const contentY = useTransform(scrollYProgress, [start, start + tr], ["3%", "0%"]);
 
-  // 프로그레스 바 — 스크롤 직동 유지
   const progressWidth = useTransform(progress, [0, 1], ["0%", "100%"]);
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
@@ -75,21 +75,21 @@ function SolutionFixed({ scrollYProgress, range }: { scrollYProgress: MotionValu
       <motion.div style={{ opacity: contentOpacity, scale: contentScale, y: contentY }} className="flex h-full items-center">
         <div className="mx-auto w-full max-w-6xl px-8">
           <div className="mb-12">
-            <span className="text-xs font-medium uppercase tracking-widest text-gray-400">Solution</span>
-            <h2 className="mt-4 text-[48px] font-semibold leading-tight tracking-tight text-gray-950">ForGet은 다릅니다.</h2>
-            <p className="mt-3 text-lg text-gray-500">확인하지 않아도, 필요한 순간에 알려드립니다.</p>
+            <span className="text-xs font-medium uppercase tracking-widest text-gray-400">{t("solution.eyebrow")}</span>
+            <h2 className="mt-4 text-[48px] font-semibold leading-tight tracking-tight text-gray-950">{t("solution.title")}</h2>
+            <p className="mt-3 text-lg text-gray-500">{t("solution.subtitle")}</p>
             <div className="mt-8 h-px w-full bg-gray-200"><motion.div style={{ width: progressWidth }} className="h-full bg-gray-950" /></div>
           </div>
           <div className="flex items-start gap-16">
             <div className="flex-1">
               <div className="mb-8 flex items-center gap-6">
-                {features.map((_, i) => (<span key={i} className={`text-sm font-semibold transition-all duration-500 ${activeIndex === i ? "text-gray-950 scale-110" : "text-gray-300"}`}>{String(i + 1).padStart(2, "0")}</span>))}
+                {FEATURE_KEYS.map((_, i) => (<span key={i} className={`text-sm font-semibold transition-all duration-500 ${activeIndex === i ? "text-gray-950 scale-110" : "text-gray-300"}`}>{String(i + 1).padStart(2, "0")}</span>))}
               </div>
               <div className="relative min-h-[160px]">
-                {features.map((f, i) => (
+                {FEATURE_KEYS.map((f, i) => (
                   <motion.div key={i} animate={{ opacity: activeIndex === i ? 1 : 0, y: activeIndex === i ? 0 : 16 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="absolute inset-0" style={{ pointerEvents: activeIndex === i ? "auto" : "none" }}>
-                    <h3 className="text-3xl font-semibold tracking-tight text-gray-950">{f.title}</h3>
-                    <p className="mt-4 whitespace-pre-line text-base leading-relaxed text-gray-500">{f.description}</p>
+                    <h3 className="text-3xl font-semibold tracking-tight text-gray-950">{t(`solution.items.${f.key}.title`)}</h3>
+                    <p className="mt-4 whitespace-pre-line text-base leading-relaxed text-gray-500">{t(`solution.items.${f.key}.body`)}</p>
                   </motion.div>
                 ))}
               </div>
@@ -109,15 +109,16 @@ function SolutionFixed({ scrollYProgress, range }: { scrollYProgress: MotionValu
 }
 
 function SolutionMobile() {
+  const { t } = useLanguage();
   return (
     <section id={SECTION_IDS.solution} className="py-32 md:py-40">
       <div className="mx-auto max-w-6xl px-6 md:px-8">
-        <motion.span variants={ANIMATION.fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} className="text-xs font-medium uppercase tracking-widest text-gray-400">Solution</motion.span>
-        <motion.h2 variants={ANIMATION.fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} className="mt-4 text-[32px] font-semibold leading-tight tracking-tight text-gray-950">ForGet은 다릅니다.</motion.h2>
+        <motion.span variants={ANIMATION.fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} className="text-xs font-medium uppercase tracking-widest text-gray-400">{t("solution.eyebrow")}</motion.span>
+        <motion.h2 variants={ANIMATION.fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} className="mt-4 text-[32px] font-semibold leading-tight tracking-tight text-gray-950">{t("solution.title")}</motion.h2>
         <div className="mt-16 space-y-20">
-          {features.map((f, i) => (
+          {FEATURE_KEYS.map((f, i) => (
             <motion.div key={f.label} variants={ANIMATION.fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} className="flex flex-col gap-8">
-              <div><span className="text-sm font-semibold text-gray-300">{f.label}</span><h3 className="mt-2 text-2xl font-semibold tracking-tight text-gray-950">{f.title}</h3><p className="mt-4 whitespace-pre-line text-base leading-relaxed text-gray-500">{f.description}</p></div>
+              <div><span className="text-sm font-semibold text-gray-300">{f.label}</span><h3 className="mt-2 text-2xl font-semibold tracking-tight text-gray-950">{t(`solution.items.${f.key}.title`)}</h3><p className="mt-4 whitespace-pre-line text-base leading-relaxed text-gray-500">{t(`solution.items.${f.key}.body`)}</p></div>
               <div>{mockups[i]}</div>
             </motion.div>
           ))}

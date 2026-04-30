@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, useTransform, useMotionValueEvent, type MotionValue } from "framer-motion";
 import { SECTION_IDS, ANIMATION } from "@/lib/constants";
+import { useLanguage } from "@/lib/i18n";
 
 function CTALightButton({ platform, onClick }: { platform: "ios" | "android"; onClick: () => void }) {
   const isIOS = platform === "ios";
@@ -17,6 +18,7 @@ function CTALightButton({ platform, onClick }: { platform: "ios" | "android"; on
 }
 
 function FinalCTAFixed({ scrollYProgress, range, onCTAClick }: { scrollYProgress: MotionValue<number>; range: [number, number]; onCTAClick: (p: "ios" | "android") => void }) {
+  const { t } = useLanguage();
   const [start, end] = range;
   const [entered, setEntered] = useState(false);
   const progress = useTransform(scrollYProgress, [start, end], [0, 1]);
@@ -38,8 +40,8 @@ function FinalCTAFixed({ scrollYProgress, range, onCTAClick }: { scrollYProgress
       <motion.div style={{ opacity: contentOpacity, scale: contentScale }} className="flex h-full items-center">
         <div className="mx-auto w-full max-w-6xl px-8">
           <div className="flex flex-col items-center text-center">
-            <div className="overflow-hidden"><motion.h2 style={{ y: titleY }} className="text-[48px] font-semibold leading-tight tracking-tight text-white">일정은 맡기고,<br />순간을 챙기세요.</motion.h2></div>
-            <motion.p style={{ opacity: subOpacity, y: subY }} className="mt-5 text-lg text-gray-400">ForGet과 함께 여유로운 하루를 시작하세요.</motion.p>
+            <div className="overflow-hidden"><motion.h2 style={{ y: titleY }} className="whitespace-pre-line text-[48px] font-semibold leading-tight tracking-tight text-white">{t("cta.title")}</motion.h2></div>
+            <motion.p style={{ opacity: subOpacity, y: subY }} className="mt-5 text-lg text-gray-400">{t("cta.subtitle")}</motion.p>
             <motion.div style={{ scaleX: lineScaleX, opacity: lineOpacity }} className="mt-8 h-px w-12 origin-center bg-gray-700" />
             <motion.div style={{ opacity: ctaOpacity, scale: ctaScale }} className="mt-10 flex gap-4">
               <CTALightButton platform="ios" onClick={() => onCTAClick("ios")} />
@@ -53,12 +55,13 @@ function FinalCTAFixed({ scrollYProgress, range, onCTAClick }: { scrollYProgress
 }
 
 function FinalCTAMobile({ onCTAClick }: { onCTAClick: (p: "ios" | "android") => void }) {
+  const { t } = useLanguage();
   return (
     <section id={SECTION_IDS.cta} className="bg-gray-950 py-32 md:py-40">
       <div className="mx-auto max-w-6xl px-6 md:px-8">
         <motion.div variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.15, delayChildren: 0.1 } } }} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} className="flex flex-col items-center text-center">
-          <motion.h2 variants={ANIMATION.fadeInUp} className="text-[32px] font-semibold leading-tight tracking-tight text-white">일정은 맡기고,<br />순간을 챙기세요.</motion.h2>
-          <motion.p variants={ANIMATION.fadeInUp} className="mt-5 text-base text-gray-400">ForGet과 함께 여유로운 하루를 시작하세요.</motion.p>
+          <motion.h2 variants={ANIMATION.fadeInUp} className="whitespace-pre-line text-[32px] font-semibold leading-tight tracking-tight text-white">{t("cta.title")}</motion.h2>
+          <motion.p variants={ANIMATION.fadeInUp} className="mt-5 text-base text-gray-400">{t("cta.subtitle")}</motion.p>
           <motion.div variants={ANIMATION.drawLine} className="mt-8 h-px w-12 origin-center bg-gray-700" />
           <motion.div variants={ANIMATION.scaleSettle} className="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-4">
             <CTALightButton platform="ios" onClick={() => onCTAClick("ios")} />

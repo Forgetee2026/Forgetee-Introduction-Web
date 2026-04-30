@@ -4,6 +4,16 @@ import { useState } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import Image from "next/image";
 import { NAV_ITEMS, SECTION_RANGES, NAV_SCROLL_OFFSET } from "@/lib/constants";
+import { useLanguage } from "@/lib/i18n";
+import LanguageToggle from "@/components/ui/LanguageToggle";
+
+// NAV_ITEMS id → i18n key 매핑 (kebab-case → camelCase)
+const NAV_I18N_KEY: Record<string, string> = {
+  problem: "problem",
+  solution: "solution",
+  "how-it-works": "howItWorks",
+  philosophy: "philosophy",
+};
 
 // 섹션 ID → 스크롤 범위 매핑
 const SECTION_START: Record<string, number> = {
@@ -21,6 +31,7 @@ export default function Header({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
   const { scrollY, scrollYProgress } = useScroll();
+  const { t } = useLanguage();
 
   // 데스크톱: scrollYProgress 기반 활성 섹션 판별
   useMotionValueEvent(scrollYProgress, "change", (v) => {
@@ -87,13 +98,13 @@ export default function Header({
           >
             <Image
               src="/images/main_logo_size_up.png"
-              alt="ForGet 로고"
+              alt="ForGetee 로고"
               width={32}
               height={32}
               className="h-8 w-auto"
             />
             <span className="text-xl font-semibold tracking-tight text-gray-950">
-              For<span className="font-bold">G</span>et
+              For<span className="font-bold">G</span>etee
             </span>
           </a>
 
@@ -109,7 +120,7 @@ export default function Header({
                     : "text-gray-500 hover:text-gray-700"
                 }`}
               >
-                {item.label}
+                {t(`header.nav.${NAV_I18N_KEY[item.id] ?? item.id}`)}
                 {activeId === item.id && (
                   <motion.div
                     layoutId="nav-indicator"
@@ -119,11 +130,12 @@ export default function Header({
                 )}
               </button>
             ))}
+            <LanguageToggle layoutGroupId="lang-toggle-header" />
             <button
               onClick={onCTAClick}
               className="rounded-full bg-gray-950 px-5 py-2 text-sm font-medium text-white transition-all hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98]"
             >
-              시작하기
+              {t("header.cta")}
             </button>
           </div>
 
@@ -165,9 +177,10 @@ export default function Header({
               onClick={() => scrollToSection(item.id)}
               className="text-2xl font-semibold text-gray-950 transition-colors hover:text-gray-600"
             >
-              {item.label}
+              {t(`header.nav.${NAV_I18N_KEY[item.id] ?? item.id}`)}
             </button>
           ))}
+          <LanguageToggle layoutGroupId="lang-toggle-mobile-menu" size="md" />
           <button
             onClick={() => {
               setMobileMenuOpen(false);
@@ -175,7 +188,7 @@ export default function Header({
             }}
             className="mt-4 rounded-full bg-gray-950 px-8 py-3 text-lg font-medium text-white"
           >
-            시작하기
+            {t("header.cta")}
           </button>
         </div>
       </motion.div>
