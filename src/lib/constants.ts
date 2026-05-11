@@ -16,6 +16,7 @@ export const NAV_ITEMS = [
 
 export const SECTION_IDS = {
   hero: "hero",
+  about: "about",
   problem: "problem",
   solution: "solution",
   howItWorks: "how-it-works",
@@ -25,10 +26,11 @@ export const SECTION_IDS = {
 
 // 섹션 스크롤 범위 (데스크톱 풀페이지 모드)
 export const SECTION_RANGES = {
-  hero: [0, 0.12] as [number, number],
-  problem: [0.12, 0.30] as [number, number],
-  solution: [0.30, 0.52] as [number, number],
-  howItWorks: [0.52, 0.72] as [number, number],
+  hero: [0, 0.10] as [number, number],
+  about: [0.10, 0.20] as [number, number],
+  problem: [0.20, 0.36] as [number, number],
+  solution: [0.36, 0.54] as [number, number],
+  howItWorks: [0.54, 0.72] as [number, number],
   philosophy: [0.72, 0.88] as [number, number],
   cta: [0.88, 1.0] as [number, number],
 } as const;

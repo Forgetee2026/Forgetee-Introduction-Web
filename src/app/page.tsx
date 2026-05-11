@@ -5,6 +5,7 @@ import { useScroll, useMotionValueEvent } from "framer-motion";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/sections/HeroSection";
+import AboutSection from "@/components/sections/AboutSection";
 import ProblemSection from "@/components/sections/ProblemSection";
 import SolutionSection from "@/components/sections/SolutionSection";
 import HowItWorksSection from "@/components/sections/HowItWorksSection";
@@ -52,6 +53,10 @@ export default function Home() {
               range={SECTION_RANGES.hero}
               onCTAClick={handleCTAClick}
             />
+            <AboutSection
+              scrollYProgress={scrollYProgress}
+              range={SECTION_RANGES.about}
+            />
             <ProblemSection
               scrollYProgress={scrollYProgress}
               range={SECTION_RANGES.problem}
@@ -79,6 +84,7 @@ export default function Home() {
       <div className="lg:hidden">
         <main>
           <HeroSection onCTAClick={handleCTAClick} />
+          <AboutSection />
           <ProblemSection />
           <SolutionSection />
           <HowItWorksSection />

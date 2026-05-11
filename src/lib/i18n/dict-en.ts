@@ -20,6 +20,23 @@ export const en: TranslationDict = {
     subtitle:
       "Stop wasting time staring at your calendar.\nForGetee pings you exactly when it matters.",
   },
+  about: {
+    eyebrow: "About",
+    title: "What is ForGetee?",
+    description:
+      "ForGetee is an AI-powered schedule reminder mobile app.\nIt automatically analyzes the events you add and notifies you\nat the most fitting moment via push notification and AI voice call.",
+    featuresTitle: "Key features",
+    features: {
+      a: "Create events automatically from natural language input",
+      b: "AI factors in event importance and travel time to suggest reminder timing",
+      c: "Important events are announced via AI voice call",
+      d: "Two-way Google Calendar sync to manage all events in one place",
+    },
+    dataUsageTitle: "Google account data usage",
+    dataUsage:
+      "ForGetee uses Google Calendar access only when the user grants consent,\nstrictly for reading, creating, and syncing calendar events.\nWe never share collected data with any third party.",
+    privacyLink: "Read our Privacy Policy",
+  },
   problem: {
     eyebrow: "Problem",
     titleDesktop: "Are you still opening\nthe calendar yourself?",

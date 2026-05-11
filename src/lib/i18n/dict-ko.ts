@@ -19,6 +19,23 @@ export const ko: TranslationDict = {
     title: "일정은 잊으세요.\n기억은 제가 할게요.",
     subtitle: "캘린더 들여다보는 시간도 아깝잖아요.\nForGetee이 필요한 순간에 알려드립니다.",
   },
+  about: {
+    eyebrow: "About",
+    title: "ForGetee는 어떤 앱인가요?",
+    description:
+      "ForGetee는 AI 기반 일정 리마인더 모바일 앱입니다.\n사용자가 등록한 일정을 자동으로 분석해 가장 적절한 시점에\n푸시 알림과 AI 음성 전화로 알려드립니다.",
+    featuresTitle: "주요 기능",
+    features: {
+      a: "자연어 입력만으로 일정 자동 생성",
+      b: "AI가 일정의 중요도·이동 시간을 고려해 리마인드 시점 추천",
+      c: "중요한 일정은 AI 음성 전화로 안내",
+      d: "Google 캘린더 양방향 동기화로 기존 일정 통합 관리",
+    },
+    dataUsageTitle: "Google 계정 데이터 사용",
+    dataUsage:
+      "ForGetee는 사용자가 동의한 경우에만 Google 캘린더 권한을 사용하며,\n오직 일정 조회·생성·동기화 목적에만 사용합니다.\n수집된 데이터는 제3자와 공유되지 않습니다.",
+    privacyLink: "개인정보처리방침 자세히 보기",
+  },
   problem: {
     eyebrow: "Problem",
     titleDesktop: "캘린더,\n아직도 직접 열고 있나요?",
