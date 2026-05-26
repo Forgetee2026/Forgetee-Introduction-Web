@@ -16,6 +16,7 @@ import { useModal } from "@/hooks/useModal";
 import { SECTION_RANGES, SCROLL_HEIGHT } from "@/lib/constants";
 import { APP_STORE_IOS_URL } from "@/lib/external-urls";
 
+
 export default function Home() {
   const modal = useModal();
   const scrollRef = useRef<HTMLDivElement>(null);
