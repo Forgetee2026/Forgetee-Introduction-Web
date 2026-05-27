@@ -62,7 +62,7 @@ function PhilosophyFixed({ scrollYProgress, range }: { scrollYProgress: MotionVa
             transition={{ duration: 0.8, ease: EASE_OUT_EXPO }}
             className="mt-8 text-xl tracking-wide text-gray-400"
           >
-            <span className="font-semibold text-gray-950">For</span> you, <span className="font-semibold text-gray-950">Get</span> everything done.
+            <span className="font-semibold text-gray-950">For</span> you <span className="font-semibold text-gray-950">Get</span> <span className="font-semibold text-gray-950">E</span>verything <span className="font-semibold text-gray-950">E</span>arly
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -87,7 +87,7 @@ function PhilosophyMobile() {
           {lines.map((line, i) => (<div key={i} className="overflow-hidden"><motion.p variants={{ hidden: { y: "100%" }, visible: { y: "0%", transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } } }} className="text-[32px] font-semibold leading-[1.15] tracking-tight text-gray-950">{line}</motion.p></div>))}
         </motion.div>
         <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ delay: 1, duration: 1.2, ease: [0.16, 1, 0.3, 1] }} className="mx-auto mt-10 h-px w-12 origin-center bg-gray-300" />
-        <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-8 text-lg tracking-wide text-gray-400"><span className="font-semibold text-gray-950">For</span> you, <span className="font-semibold text-gray-950">Get</span> everything done.</motion.p>
+        <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-8 text-lg tracking-wide text-gray-400"><span className="font-semibold text-gray-950">For</span> you <span className="font-semibold text-gray-950">Get</span> <span className="font-semibold text-gray-950">E</span>verything <span className="font-semibold text-gray-950">E</span>arly</motion.p>
         <motion.p initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 1.5, duration: 0.8 }} className="mt-3 text-sm text-gray-400">{t("philosophy.taglineSub")}</motion.p>
       </div>
     </section>
